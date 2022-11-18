@@ -8,10 +8,10 @@ class apache {
     ensure => installed,
   }
 
-  file { '/etc/apache2/sites-enabled/000-default.conf':
-    ensure => absent,
-    require => Package['apache2'],
-  }
+  # file { '/etc/apache2/sites-enabled/000-default.conf':
+  #   ensure => absent,
+  #   require => Package['apache2'],
+  # }
 
   # file { '/etc/apache2/sites-available/vagrant.conf':
   #   content => template('apache/virtual-hosts.conf.erb'),

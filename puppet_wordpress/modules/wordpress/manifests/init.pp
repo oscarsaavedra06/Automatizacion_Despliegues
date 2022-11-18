@@ -1,4 +1,4 @@
-class apache {
+class wordpress {
                   
   package { 'ghostscript':
     ensure => installed,
@@ -17,36 +17,49 @@ class apache {
     command => '/usr/bin/curl https://wordpress.org/latest.tar.gz | sudo -u www-data tar zx -C /srv/www'
   }
 
-
-  file { '/etc/apache2/sites-enabled/000-default.conf':
-    ensure => absent,
-    require => Package['apache2'],
+file { '/etc/apache2/sites-available/wordpress.conf':
+    content => template('wordpress/virtual-hosts.conf.erb')
   }
 
-  file { '/etc/apache2/sites-available/vagrant.conf':
-    content => template('apache/virtual-hosts.conf.erb'),
-    require => File['/etc/apache2/sites-enabled/000-default.conf'],
+file { '/srv/www/wordpress/wp_salts.sh':
+    content => template('wordpress/wp_salts.sh')
   }
 
-  file { "/etc/apache2/sites-enabled/vagrant.conf":
-    ensure  => link,
-    target  => "/etc/apache2/sites-available/vagrant.conf",
-    require => File['/etc/apache2/sites-available/vagrant.conf'],
-    notify  => Service['apache2'],
+
+  exec { 'enable':
+    command => '/usr/bin/sudo a2ensite wordpress',
+    require => File['/etc/apache2/sites-available/wordpress.conf']
   }
 
-  file { "${document_root}/index.html":
-    ensure  => present,
-    source => 'puppet:///modules/apache/index.html',
-    require => File['/etc/apache2/sites-enabled/vagrant.conf'],
-    notify  => Service['apache2'],
+  exec { 'rewrite':
+    command => '/usr/bin/sudo a2enmod rewrite'
+  }
+ 
+  exec { 'disable':
+    command => '/usr/bin/sudo a2dissite 000-default'
   }
 
-  service { 'apache2':
-    ensure => running,
-    enable => true,
-    hasstatus  => true,
-    restart => "/usr/sbin/apachectl configtest && /usr/sbin/service apache2 reload",
+    exec { 'reload':
+    command => '/usr/bin/sudo service apache2 reload'
+  }
+    exec { 'copy-conf':
+    command => '/usr/bin/sudo -u www-data cp /srv/www/wordpress/wp-config-sample.php /srv/www/wordpress/wp-config.php'
+  }
+
+    exec { 'copy-conf-db':
+    command => '/usr/bin/sudo -u www-data sed -i \"s/database_name_here/wordpress/\" /srv/www/wordpress/wp-config.php'
+  }
+    exec { 'copy-conf-usr':
+    command => '/usr/bin/sudo -u www-data sed -i \"s/username_here/wordpress/\" /srv/www/wordpress/wp-config.php'
+  }
+    exec { 'copy-conf-pass':
+    command => '/usr/bin/sudo -u www-data sed -i \"s/password_here/wordpres123/\" /srv/www/wordpress/wp-config.php'
+  }
+    exec { 'permission':
+    command => '/usr/bin/sudo chmod +x /srv/www/wordpress/wp_salts.sh'
+  }
+    exec { 'bash-script':
+    command => '/usr/bin/sudo /srv/www/wordpress/wp_salts.sh'
   }
 }
 

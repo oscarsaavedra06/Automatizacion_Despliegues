@@ -3,6 +3,7 @@ $mysql_password = "abc123***"
 include apache
 include php
 include mysql
+include wordpress
 
 exec { 'Skip Message':
   command => "echo ‘Este mensaje sólo se muestra si no se ha copiado el fichero index.html'",

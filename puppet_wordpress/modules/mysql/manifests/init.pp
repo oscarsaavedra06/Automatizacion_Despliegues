@@ -5,13 +5,13 @@ class mysql {
   }
   package { 'php-mysql':
     ensure => installed,
-    require => Package['mysql-server'],
+    
   }
 
    service { 'mysql':
     ensure  => running,
     enable  => true,
-    require => Package['mysql-server'],
+    
   }
 
  file { "/var/lib/mysql/my.cnf":
