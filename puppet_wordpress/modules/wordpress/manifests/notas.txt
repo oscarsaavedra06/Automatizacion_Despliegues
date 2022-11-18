@@ -1,0 +1,52 @@
+https://ubuntu.com/tutorials/install-and-configure-wordpress#3-install-wordpress
+define('AUTH_KEY',         'rer2@+:3tCc|f@Y7kCfZv>h kVgj9m2Dw gcR3`hr>/0Rwr R( X/_` 9quzQtFc');
+define('SECURE_AUTH_KEY',  'Y}bVpNL14obqY`]IGUI@|$TA10~P+k n~-qYteJS|kdDiVg)b5s*s/t;71bK%qmg');
+define('LOGGED_IN_KEY',    ']`S@smuUw|Vc^qm~ xvEV.E_ed`Wi*3r[jkc$y~:u<U@Xmpv_a6b+G(dsC*bCi`o');
+define('NONCE_KEY',        'KqAhV;<yHn1FV%z6wz7_CMo[#a.+tS)bdYHmY)|iFia|cZYN$Ut ZOC5_.+re+#v');
+define('AUTH_SALT',        'E$oCV->thkk9@h!>4JtBLyGY ,~hvwN3.7+z|6,0o8fr>+:T[kqdQXy<mScyqPy0');
+define('SECURE_AUTH_SALT', 'QSwpKH|#kh`rvO_-g;BCUs?hc*>e)]d,JmJ4}v5B5o))85Dz-Af]4ML5 Y{|)Hh~');
+define('LOGGED_IN_SALT',   'no%04;K-M$l#HoferJOgQz8g/8F8}prijzN,+{S!#*GN _0jZ<Hqi>J2xV;zqfl0');
+define('NONCE_SALT',       '~I]kL.#2{,fb*P-swMQqj*jI3!Y.^p?13:x9=1~lsGN{{zX^3FsXESkPlcDpOpE ');
+https://www.cloudways.com/blog/install-wordpress-using-wp-cli/
+https://developer.wordpress.org/cli/commands/core/install/
+ sudo chmod +x wp_salts.sh
+ sudo ./wp_salts.sh
+ 
+0Tz5LV5l6IK@6rZ9)A
+
+update wp_posts set post_content='<h3>Hola desde wordpress instalado con puppet</h3>';
+
+DROP TABLE IF EXISTS wp_commentmeta;
+DROP TABLE IF EXISTS wp_comments;
+DROP TABLE IF EXISTS wp_links;
+ DROP TABLE IF EXISTS wp_options;
+ DROP TABLE IF EXISTS wp_postmeta;
+ DROP TABLE IF EXISTS wp_posts;
+ DROP TABLE IF EXISTS wp_term_relationships;
+  DROP TABLE IF EXISTS wp_term_taxonomy;
+   DROP TABLE IF EXISTS wp_termmeta;    
+   DROP TABLE IF EXISTS wp_terms;
+   DROP TABLE IF EXISTS wp_usermeta;
+   DROP TABLE IF EXISTS wp_users;
+
+   install wp cli
+
+   cd /opt
+sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+sudo php wp-cli.phar --info
+sudo chmod +x wp-cli.phar
+sudo mv wp-cli.phar /usr/local/bin/
+cd /srv/www/wordpress
+
+    ID: 1
+         user_login: admin12
+          user_pass: $P$B6Er5jvGL/Ytckk4cifwUPYQBsU6UY0
+      user_nicename: admin12
+         user_email: oscarsaavedra06@gmail.com
+           user_url: http://localhost:8084
+    user_registered: 2022-11-18 02:57:24
+user_activation_key:
+        user_status: 0
+       display_name: admin12
+1 row in set (0.00 sec)
+wp core install --url=http://localhost:8084 --title=Your_Blog_Title --admin_user=admin12 --admin_password=0Tz5LV5l6IK@6rZ9)A --admin_email=oscarsaavedra06@gmail.com
