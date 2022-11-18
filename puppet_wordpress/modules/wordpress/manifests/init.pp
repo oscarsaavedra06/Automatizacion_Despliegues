@@ -1,12 +1,22 @@
 class apache {
-  exec { 'apt-update':
-    command => '/usr/bin/apt-get update'
-  }
-  Exec["apt-update"] -> Package <| |>
-
-  package { 'apache2':
+                  
+  package { 'ghostscript':
     ensure => installed,
   }
+  package { 'libapache2-mod-php':
+    ensure => installed,
+  }
+
+ exec { 'descarga-1':
+    command => '/usr/bin/sudo mkdir -p /srv/www'
+  }
+ exec { 'descarga-2':
+    command => '/usr/bin/sudo chown www-data: /srv/www'
+  }
+ exec { 'descarga-3':
+    command => '/usr/bin/curl https://wordpress.org/latest.tar.gz | sudo -u www-data tar zx -C /srv/www'
+  }
+
 
   file { '/etc/apache2/sites-enabled/000-default.conf':
     ensure => absent,

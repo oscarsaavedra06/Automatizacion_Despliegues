@@ -3,6 +3,10 @@ class mysql {
   package { 'mysql-server':
     ensure => installed,
   }
+  package { 'php-mysql':
+    ensure => installed,
+    require => Package['mysql-server'],
+  }
 
    service { 'mysql':
     ensure  => running,
