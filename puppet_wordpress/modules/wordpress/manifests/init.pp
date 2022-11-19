@@ -21,45 +21,59 @@ file { '/etc/apache2/sites-available/wordpress.conf':
     content => template('wordpress/virtual-hosts.conf.erb')
   }
 
-file { '/srv/www/wordpress/wp_salts.sh':
-    content => template('wordpress/wp_salts.sh')
-  }
-
-
   exec { 'enable':
     command => '/usr/bin/sudo a2ensite wordpress',
     require => File['/etc/apache2/sites-available/wordpress.conf']
   }
 
   exec { 'rewrite':
-    command => '/usr/bin/sudo a2enmod rewrite'
+    command => '/usr/bin/sudo a2enmod rewrite && sudo a2dissite 000-default && sudo service apache2 reload'
   }
  
-  exec { 'disable':
-    command => '/usr/bin/sudo a2dissite 000-default'
-  }
-
-    exec { 'reload':
-    command => '/usr/bin/sudo service apache2 reload'
-  }
+ 
     exec { 'copy-conf':
     command => '/usr/bin/sudo -u www-data cp /srv/www/wordpress/wp-config-sample.php /srv/www/wordpress/wp-config.php'
   }
 
     exec { 'copy-conf-db':
-    command => '/usr/bin/sudo -u www-data sed -i \"s/database_name_here/wordpress/\" /srv/www/wordpress/wp-config.php'
+    command => '/usr/bin/sudo -u www-data sed -i \'s/database_name_here/wordpress/\' /srv/www/wordpress/wp-config.php'
   }
     exec { 'copy-conf-usr':
-    command => '/usr/bin/sudo -u www-data sed -i \"s/username_here/wordpress/\" /srv/www/wordpress/wp-config.php'
+    command => '/usr/bin/sudo -u www-data sed -i \'s/username_here/wordpress/\' /srv/www/wordpress/wp-config.php'
   }
     exec { 'copy-conf-pass':
-    command => '/usr/bin/sudo -u www-data sed -i \"s/password_here/wordpres123/\" /srv/www/wordpress/wp-config.php'
+    command => '/usr/bin/sudo -u www-data sed -i \'s/password_here/wordpres123/\' /srv/www/wordpress/wp-config.php'
   }
-    exec { 'permission':
-    command => '/usr/bin/sudo chmod +x /srv/www/wordpress/wp_salts.sh'
+    exec { 'wpsucli':
+    command => 'sudo wget -qO wpsucli https://git.io/vykgu && sudo chmod +x ./wpsucli && sudo install ./wpsucli /usr/local/bin/wpsucli',
+    path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ]
   }
-    exec { 'bash-script':
-    command => '/usr/bin/sudo /srv/www/wordpress/wp_salts.sh'
+    exec { 'wpsucli-exec':
+    command => '/usr/bin/sudo sudo wpsucli'
   }
+  #   exec { 'create-post':
+  #   command => 'sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && sudo chmod +x wp-cli.phar && sudo mv wp-cli.phar /usr/local/bin/wp && wp core install --path=/srv/www/wordpress/ --url=http://localhost:8084 --title=Puppet y Wordpress --admin_user=admin12 --admin_password=abc123 --admin_email=oscarsaavedra06@gmail.com',
+  #   path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ]
+  # }
+ 
+	# Install curl
+    package { 'curl':
+        ensure => latest
+    }
+ 
+  exec { 'Install WP CLI':
+        command => "/usr/bin/curl -o /usr/bin/wp-cli -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar",
+        require =>  Package['curl'],
+        creates => "/usr/bin/wp-cli"
+    }
+ file { '/usr/bin/wp-cli':
+        mode => "775",
+        require => Exec['Install WP CLI']
+    }
+
+exec { 'create-post':
+    command => '/usr/bin/wp-cli core install --alow-root --path=/srv/www/wordpress/ --url=http://localhost:8084 --title=Puppet_y_Wordpress --admin_user=admin12 --admin_password=abc123 --admin_email=oscarsaavedra06@gmail.com'
+  }
+
 }
 

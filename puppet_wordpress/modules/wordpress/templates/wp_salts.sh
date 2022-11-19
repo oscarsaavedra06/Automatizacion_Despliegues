@@ -6,6 +6,12 @@
 # sed -i "/^$SEARCH/s/put your unique phrase here/$(echo $REPLACE | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')/" ./wp-config.php
 # done <<< "$SALTS"
 
+sudo -u www-data sed -i 's/database_name_here/wordpress/' /srv/www/wordpress/wp-config.php
+sudo -u www-data sed -i 's/username_here/wordpress/' /srv/www/wordpress/wp-config.php
+sudo -u www-data sed -i 's/password_here/wordpres123/' /srv/www/wordpress/wp-config.php
+
+
+
 find . -name wp-config.php -print | while read line
 do 
     curl http://api.wordpress.org/secret-key/1.1/salt/ > wp_keys.txt
