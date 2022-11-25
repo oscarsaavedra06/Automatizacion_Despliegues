@@ -51,26 +51,15 @@ file { '/etc/apache2/sites-available/wordpress.conf':
     exec { 'wpsucli-exec':
     command => '/usr/bin/sudo wpsucli'
   }
-  #   exec { 'install-wp-cli':
-  #   command => 'sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && php wp-cli.phar -info && sudo chmod +x wp-cli.phar && sudo mv wp-cli.phar /usr/local/bin/wp',
-  #   path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ]
-  # }
-exec { 'p1':
-    command => '/usr/bin/sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar'
-  }
-  # exec { 'p2':
-  #   command => '/usr/bin/sudo php wp-cli.phar'
-  # }
-  exec { 'p3':
-    command => '/usr/bin/sudo chmod 775 wp-cli.phar'
+    exec { 'install-wp-cli':
+    command => 'sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && sudo chmod +x wp-cli.phar && sudo mv wp-cli.phar /usr/local/bin/wp',
+    path =>  [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ]
   }
 
-exec { 'p4':
-    command => '/usr/bin/sudo mv wp-cli.phar /usr/local/bin/wp'
-  }
  exec { 'create-post':
     command => '/usr/bin/sudo -u vagrant -i -- wp core install  --path=/srv/www/wordpress/ --url=http://localhost:8084 --title=Puppet_y_Wordpress --admin_user=admin12 --admin_password=abc123 --admin_email=oscarsaavedra06@gmail.com'
   }
+
 
 }
 
