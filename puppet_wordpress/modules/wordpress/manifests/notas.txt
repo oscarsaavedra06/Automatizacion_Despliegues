@@ -29,6 +29,14 @@ DROP TABLE IF EXISTS wp_links;
    DROP TABLE IF EXISTS wp_usermeta;
    DROP TABLE IF EXISTS wp_users;
 
+
+bash sudo wget -qO wpsucli https://git.io/vykgu && sudo chmod +x ./wpsucli && sudo install ./wpsucli /usr/local/bin/wpsucli
+
+sudo wpsucli
+
+
+
+
    install wp cli
 
    cd /opt
@@ -37,16 +45,9 @@ sudo php wp-cli.phar --info
 sudo chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/
 cd /srv/www/wordpress
+ 
+wp core install --url=http://localhost:8084 --title=Your_Blog_Title --admin_user=admin12 --admin_password=abc123 --admin_email=oscarsaavedra06@gmail.com
 
-    ID: 1
-         user_login: admin12
-          user_pass: $P$B6Er5jvGL/Ytckk4cifwUPYQBsU6UY0
-      user_nicename: admin12
-         user_email: oscarsaavedra06@gmail.com
-           user_url: http://localhost:8084
-    user_registered: 2022-11-18 02:57:24
-user_activation_key:
-        user_status: 0
-       display_name: admin12
-1 row in set (0.00 sec)
-wp core install --url=http://localhost:8084 --title=Your_Blog_Title --admin_user=admin12 --admin_password=0Tz5LV5l6IK@6rZ9)A --admin_email=oscarsaavedra06@gmail.com
+
+
+<!-- wp:paragraph --><p>Primer post generado automaticamente con puppet</p><!-- /wp:paragraph -->
